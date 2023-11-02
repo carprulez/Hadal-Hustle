@@ -16,7 +16,7 @@ class Menu extends Phaser.Scene {
             align: 'center',
             fixedWidth: 0
         }
-        this.add.tileSprite(0, 0, 1080, 640, 'titleScreen').setOrigin(0, 0);
+        this.add.tileSprite(0, 0, 1080, 840, 'titleScreen').setOrigin(0, 0);
 
         this.add.text(game.config.width/2, game.config.height-80, 'Press SPACE to start', menuConfig).setOrigin(0.5);
         
