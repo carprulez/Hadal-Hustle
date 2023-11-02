@@ -5,7 +5,7 @@ class Menu extends Phaser.Scene {
 
     preload() {
         this.load.image('titleScreen', './assets/titleScreenHadal.png');
-        this.load.audio('titleMusic', './assets/music.mp3')
+        this.load.audio('titleMusic', './assets/titleMusicHadal.mp3')
     }
 
     create() {
