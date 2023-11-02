@@ -3,6 +3,10 @@ class Instructions extends Phaser.Scene {
         super("instructionsScene"); 
     }
 
+    preload() {
+        
+    }
+
     create() {
         // load how to play diagram here
     }

@@ -3,6 +3,10 @@ class GameOver extends Phaser.Scene {
         super("gameOverScene")
     }
 
+    preload() {
+        // place assets
+    }
+
     create() {
         // make game over assets
     }

@@ -3,6 +3,10 @@ class Play extends Phaser.Scene {
         super("playScene");
     }
 
+    preload() {
+        // load play assests
+    }
+
     create() {
         // place tile sprites, create UI, place game pieces here
     }

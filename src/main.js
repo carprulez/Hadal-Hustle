@@ -6,13 +6,13 @@
 let config = {
     type: Phaser.AUTO,
     width: 1080,
-    height: 840,
+    height: 640,
     scene: [ Menu, Play, GameOver, Instructions ]
 }
 let game = new Phaser.Game(config);
 
 // reserve keyboard var
-let keySPACE;
+let keySPACE, keyR;
 
 // set UI size
 let borderUISize = game.config.height / 15;
