@@ -1,12 +1,21 @@
 // Shark prefab
-class Shark extends Phaser.GameObjects.Sprite {
+class Shark extends Phaser.Physics.Arcade.Sprite {
     constructor(scene, x, y, texture) {
-        super(scene, x, Phaser.Math.Between(game.config.height / 8, game.config.height - sharkHeight/2), 'shark');
-        scene.add.existing(this);
+        super(scene, x, y, texture);
+        this.parentScene = scene;
+        this.parentScene.add.existing(this);
+        this.parentScene.physics.add.existing(this);
         this.moveSpeed = 2;
+        this.setImmovable();
+        this.setAllowGravity(false);
     }
 
     update() {
         this.x -= this.moveSpeed;
+
+        // destroy if hits edge of screen
+        if(this.x <= 0 - this.width) {
+            this.destroy()
+        }
     }
 }

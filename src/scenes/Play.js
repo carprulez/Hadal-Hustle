@@ -19,7 +19,7 @@ class Play extends Phaser.Scene {
         this.physics.world.gravity.y = 300;
 
         // add sub
-        this.sub = this.physics.add.sprite(width / 10, height / 2, 'sub');
+        this.sub = new Sub(this, width / 10, height / 2, 'sub')
         this.sub.body.setCollideWorldBounds(true);
         this.sub.body.setAllowGravity(true);
 
@@ -33,10 +33,13 @@ class Play extends Phaser.Scene {
 
         this.physics.add.collider(this.sub, this.oceanFloor);
         this.physics.add.collider(this.sub, this.shark);
-        this.physics
+        this.physics.add.collider(this.sub, this.eel);
+        this.gameOver = false;
     }
 
     update() {
-        // handle frame by frame checks here
+        if(this.gameOver) {
+            this.scene.start('gameOverScene');
+        }
     }
 }

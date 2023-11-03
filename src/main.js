@@ -13,7 +13,8 @@ let config = {
         arcade: {
             debug: true
         }
-    }
+    },
+    render: { pixelArt: true }
 }
 let game = new Phaser.Game(config);
 

@@ -1,5 +1,5 @@
 // Eel prefab
-class Shark extends Phaser.GameObjects.Sprite {
+class Shark extends Phaser.Physics.Arcade.Sprite {
     constructor(scene, x, y, texture, frame) {
         super(scene, x, y, texture, frame);
         scene.add.existing(this);
