@@ -24,7 +24,7 @@ class Play extends Phaser.Scene {
         this.sub.body.setAllowGravity(true);
 
         this.shark = this.physics.add.sprite(width, 'shark');
-        this.sub.body.setAllowGravity(false);
+        this.shark.body.setAllowGravity(false);
 
         // add ocean floor
         this.oceanFloor = this.physics.add.sprite(0, 775, 'oceanFloor');
