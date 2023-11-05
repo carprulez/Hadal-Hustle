@@ -13,9 +13,9 @@ class Play extends Phaser.Scene {
 
     create() {
         // add background
-        this.deepSea = this.add.image(0, 0, 'deepSea').setOrigin(0, 0);
+        this.deepSea = this.add.tileSprite(0, 0, 1080, 840, 'deepSea').setOrigin(0, 0);
 
-        this.p1Score = 0;
+        this.score = 0;
         this.gameOver = false;
 
         // adding looping music
@@ -27,8 +27,9 @@ class Play extends Phaser.Scene {
         let scoreConfig = {
             fontFamily: 'Courier',
             fontSize: '20px',
+            backgroundColor: '#3D3D3D',
             color: '#FFFFFF',
-            align: 'right',
+            align: 'center',
             padding: {
                 top: 5,
                 bottom: 5
@@ -49,7 +50,7 @@ class Play extends Phaser.Scene {
         }
         
         // add elapsed time
-        this.score = this.add.text(width, height, this.p1Score, scoreConfig);
+        this.total = this.add.text(game.config.width/2 - 35 , 0, this.score, scoreConfig);
 
         // adding world gravity
         this.physics.world.gravity.y = 300;
@@ -75,6 +76,15 @@ class Play extends Phaser.Scene {
         this.oceanFloor = this.physics.add.sprite(540, 725, 'oceanFloor');
         this.oceanFloor.body.setAllowGravity(false);
         this.oceanFloor.body.setImmovable(true);
+
+        this.clock = this.time.delayedCall(100000000000, () => {
+            this.gameOver = true
+        }, null, this);
+
+        this.speedUp = this.time.delayedCall(15, () => {
+            this.eelGroup.increase = true;
+            this.sharkGroup.increase = true;
+        }, null, this);
 
         // add collision with floor
         this.physics.add.collider(this.sub, this.oceanFloor, (sub, oceanFloor) => {
@@ -105,25 +115,18 @@ class Play extends Phaser.Scene {
     update() {
         if(this.gameOver && Phaser.Input.Keyboard.JustDown(keyR)) {
             this.sound.play('restart');
-            this.scene.restart();
-        }
-        // adding clock
-        this.p1Score = this.time.now / 1000;
-        this.score.setText(this.p1Score);
-
-        if(this.p1Score % 15 == 0) {
-            this.sharkGroup.increase = true;
-            this.eelGroup.increase = true;
-        }
-
-        if(Phaser.Input.Keyboard.JustDown(keySPACE)) {
-            this.sub.body.setVelocityY(-175);
+            this.scene.start('instructionsScene');
         }
 
         if(!this.gameOver) {
             this.sub.update();
+            // adding clock
+            this.score = Math.ceil(this.clock.elapsed / 1000);
+            this.total.setText(this.score);
+            this.deepSea.tilePositionX += 3;
+            if(Phaser.Input.Keyboard.JustDown(keySPACE)) {
+                this.sub.body.setVelocityY(-175);
+            }
         }
-
-        this.deepSea.tilePositionX -= 3;
     }
 }
