@@ -9,7 +9,7 @@ class Menu extends Phaser.Scene {
         this.load.audio('subExplosion', './assets/subExplosion.wav');
         this.load.audio('startGame', './assets/startGame.wav');
         this.load.audio('enemy', './assets/enemyHadal.wav');
-        this.load.audio('bubbles', './assets/bubbles.wav')
+        this.load.audio('bubbles', './assets/bubbles.wav');
     }
 
     create() {
@@ -26,9 +26,9 @@ class Menu extends Phaser.Scene {
         
         // adding looping menu music
         // https://stackoverflow.com/questions/34210393/looping-audio-in-phaser
-        //const backgroundMusic = this.sound.add('titleMusic');
-        //backgroundMusic.loop = true;
-        //backgroundMusic.play();
+        const backgroundMusic = this.sound.add('titleMusic');
+        backgroundMusic.loop = true;
+        backgroundMusic.play();
 
         keySPACE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
     }

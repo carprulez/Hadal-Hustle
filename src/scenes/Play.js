@@ -14,10 +14,29 @@ class Play extends Phaser.Scene {
     create() {
         // add background
         this.deepSea = this.add.image(0, 0, 'deepSea').setOrigin(0, 0);
+
+        this.p1Score = 0;
+        this.gameOver = false;
+
+        let scoreConfig = {
+            fontFamily: 'Courier',
+            fontSize: '28px',
+            backgroundColor: '#F3B141',
+            color: '#843605',
+            align: 'right',
+            padding: {
+                top: 5,
+                bottom: 5
+            },
+            fixedWidth: 100
+        }
         
+        this.score = this.add.text(width - 20, height + 20, this.p1Score, scoreConfig);
+
         // adding world gravity
         this.physics.world.gravity.y = 300;
 
+        keyR = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
         cursors = this.input.keyboard.createCursorKeys()
 
         // add sub
@@ -29,14 +48,22 @@ class Play extends Phaser.Scene {
         this.shark.body.setAllowGravity(false);
 
         // add ocean floor
-        this.oceanFloor = this.physics.add.sprite(0, 775, 'oceanFloor');
+        this.oceanFloor = this.physics.add.sprite(540, 725, 'oceanFloor');
         this.oceanFloor.body.setAllowGravity(false);
         this.oceanFloor.body.setImmovable(true);
 
-        this.physics.add.collider(this.sub, this.oceanFloor);
-        this.physics.add.collider(this.sub, this.shark);
-        this.physics.add.collider(this.sub, this.eel);
-        this.gameOver = false;
+        this.physics.add.collider(this.sub, this.oceanFloor, (sub, oceanFloor) => {
+            sub.destroy();
+            this.gameOver = true;
+        });
+        this.physics.add.collider(this.sub, this.shark, (sub, shark) => {
+            sub.destroy();
+            this.gameOver = true;
+        });
+        this.physics.add.collider(this.sub, this.eel, (sub, eel) => {
+            sub.destroy();
+            this.gameOver = true;
+        });
     }
 
     update() {
@@ -45,7 +72,7 @@ class Play extends Phaser.Scene {
         }
 
         if(cursors.space.isDown) {
-            this.sub.body.setVelocityY(-250)
+            this.sub.body.setVelocityY(-175)
         }
 
         this.deepSea.tilePositionX -= 3;
