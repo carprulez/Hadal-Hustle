@@ -26,7 +26,7 @@ class Play extends Phaser.Scene {
 
         let scoreConfig = {
             fontFamily: 'Courier',
-            fontSize: '28px',
+            fontSize: '20px',
             color: '#FFFFFF',
             align: 'right',
             padding: {
@@ -34,6 +34,18 @@ class Play extends Phaser.Scene {
                 bottom: 5
             },
             fixedWidth: 100
+        }
+
+        let gameOverConfig = {
+            fontFamily: 'Futura',
+            fontSize: '28px',
+            backgroundColor: '#FACADE',
+            color: '#FFFFFF',
+            align: 'center',
+            padding: {
+                top: 5,
+                bottom: 5
+            },
         }
         
         // add elapsed time
@@ -68,6 +80,8 @@ class Play extends Phaser.Scene {
         this.physics.add.collider(this.sub, this.oceanFloor, (sub, oceanFloor) => {
             this.sound.play('subExplosion');
             sub.destroy();
+            this.add.text(game.config.width/2, game.config.height/2, 'GAME OVER', gameOverConfig).setOrigin(0.5);
+            this.add.text(game.config.width/2, game.config.height/2 + 32, 'Press R to restart', gameOverConfig).setOrigin(0.5);
             this.gameOver = true;
         });
         
@@ -75,11 +89,15 @@ class Play extends Phaser.Scene {
         this.physics.add.collider(this.sub, this.shark, (sub, shark) => {
             this.sound.play('subExplosion');
             sub.destroy();
+            this.add.text(game.config.width/2, game.config.height/2, 'GAME OVER', gameOverConfig).setOrigin(0.5);
+            this.add.text(game.config.width/2, game.config.height/2 + 32, 'Press R to restart', gameOverConfig).setOrigin(0.5);
             this.gameOver = true;
         });
         this.physics.add.collider(this.sub, this.eel, (sub, eel) => {
             this.sound.play('subExplosion');
             sub.destroy();
+            this.add.text(game.config.width/2, game.config.height/2, 'GAME OVER', gameOverConfig).setOrigin(0.5);
+            this.add.text(game.config.width/2, game.config.height/2 + 32, 'Press R to restart', gameOverConfig).setOrigin(0.5);
             this.gameOver = true;
         });
     }
