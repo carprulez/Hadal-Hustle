@@ -7,19 +7,21 @@ class Play extends Phaser.Scene {
         this.load.image('sub', './assets/sub.png');
         this.load.image('shark', './assets/shark.png');
         this.load.image('eel', './assets/eel.png');
-        this.load.image('oceanFloor', './assets/oceanFloor.png');
         this.load.image('deepSea', './assets/deepSea.png');
+        this.load.image('oceanFloor', './assets/oceanFloor.png');
     }
 
     create() {
         // add background
-        this.deepSea = this.add.image(0, 0, 'deepSea').setOrigin(0);
+        this.deepSea = this.add.image(0, 0, 'deepSea').setOrigin(0, 0);
         
         // adding world gravity
         this.physics.world.gravity.y = 300;
 
+        cursors = this.input.keyboard.createCursorKeys()
+
         // add sub
-        this.sub = new Sub(this, width / 10, height / 2, 'sub')
+        this.sub = this.physics.add.sprite(width / 10, height / 2, 'sub')
         this.sub.body.setCollideWorldBounds(true);
         this.sub.body.setAllowGravity(true);
 
@@ -38,8 +40,14 @@ class Play extends Phaser.Scene {
     }
 
     update() {
-        if(this.gameOver) {
-            this.scene.start('gameOverScene');
+        if(this.gameOver && Phaser.Input.Keyboard.JustDown(keyR)) {
+            this.scene.restart();
         }
+
+        if(cursors.space.isDown) {
+            this.sub.body.setVelocityY(-250)
+        }
+
+        this.deepSea.tilePositionX -= 3;
     }
 }
