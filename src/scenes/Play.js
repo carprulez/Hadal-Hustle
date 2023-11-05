@@ -18,11 +18,16 @@ class Play extends Phaser.Scene {
         this.p1Score = 0;
         this.gameOver = false;
 
+        // adding looping music
+        // https://stackoverflow.com/questions/34210393/looping-audio-in-phaser
+        const backgroundMusic = this.sound.add('titleMusic');
+        backgroundMusic.loop = true;
+        backgroundMusic.play();
+
         let scoreConfig = {
             fontFamily: 'Courier',
             fontSize: '28px',
-            backgroundColor: '#F3B141',
-            color: '#843605',
+            color: '#FFFFFF',
             align: 'right',
             padding: {
                 top: 5,
@@ -31,36 +36,49 @@ class Play extends Phaser.Scene {
             fixedWidth: 100
         }
         
-        this.score = this.add.text(width - 20, height + 20, this.p1Score, scoreConfig);
+        // add elapsed time
+        this.score = this.add.text(width, height, this.p1Score, scoreConfig);
 
         // adding world gravity
         this.physics.world.gravity.y = 300;
 
         keyR = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
-        cursors = this.input.keyboard.createCursorKeys()
+        keySPACE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+
+        // adding enemy groups
+        this.sharkGroup = this.add.group({
+            runChildUpdate: true
+        });
+
+        this.eelGroup = this.add.group({
+            runChildUpdate: true
+        });
 
         // add sub
         this.sub = this.physics.add.sprite(width / 10, height / 2, 'sub')
         this.sub.body.setCollideWorldBounds(true);
         this.sub.body.setAllowGravity(true);
 
-        this.shark = this.physics.add.sprite(width, 'shark');
-        this.shark.body.setAllowGravity(false);
-
         // add ocean floor
         this.oceanFloor = this.physics.add.sprite(540, 725, 'oceanFloor');
         this.oceanFloor.body.setAllowGravity(false);
         this.oceanFloor.body.setImmovable(true);
 
+        // add collision with floor
         this.physics.add.collider(this.sub, this.oceanFloor, (sub, oceanFloor) => {
+            this.sound.play('subExplosion');
             sub.destroy();
             this.gameOver = true;
         });
+        
+        // add collision with enemies
         this.physics.add.collider(this.sub, this.shark, (sub, shark) => {
+            this.sound.play('subExplosion');
             sub.destroy();
             this.gameOver = true;
         });
         this.physics.add.collider(this.sub, this.eel, (sub, eel) => {
+            this.sound.play('subExplosion');
             sub.destroy();
             this.gameOver = true;
         });
@@ -68,11 +86,24 @@ class Play extends Phaser.Scene {
 
     update() {
         if(this.gameOver && Phaser.Input.Keyboard.JustDown(keyR)) {
+            this.sound.play('restart');
             this.scene.restart();
         }
+        // adding clock
+        this.p1Score = this.time.now / 1000;
+        this.score.setText(this.p1Score);
 
-        if(cursors.space.isDown) {
-            this.sub.body.setVelocityY(-175)
+        if(this.p1Score % 15 == 0) {
+            this.sharkGroup.increase = true;
+            this.eelGroup.increase = true;
+        }
+
+        if(Phaser.Input.Keyboard.JustDown(keySPACE)) {
+            this.sub.body.setVelocityY(-175);
+        }
+
+        if(!this.gameOver) {
+            this.sub.update();
         }
 
         this.deepSea.tilePositionX -= 3;

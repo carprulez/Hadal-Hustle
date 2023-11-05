@@ -23,6 +23,7 @@ class Instructions extends Phaser.Scene {
 
     update() {
         if(Phaser.Input.Keyboard.JustDown(keySPACE)) {
+            this.sound.play('startGame');
             this.scene.start('playScene');
         }
     }
