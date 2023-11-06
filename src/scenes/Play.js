@@ -9,11 +9,13 @@ class Play extends Phaser.Scene {
         this.load.image('eel', './assets/eel.png');
         this.load.image('deepSea', './assets/deepSea.png');
         this.load.image('oceanFloor', './assets/oceanFloor.png');
+        this.load.image('collisionLine', './assets/collisionLine.png');
     }
 
     create() {
         // add background
         this.deepSea = this.add.tileSprite(0, 0, 1080, 840, 'deepSea').setOrigin(0, 0);
+        this.oceanFloor = this.add.tileSprite(0, game.config.height - 233, 1080, 233, 'oceanFloor').setOrigin(0, 0);
 
         this.score = 0;
         this.gameOver = false;
@@ -48,6 +50,18 @@ class Play extends Phaser.Scene {
                 bottom: 5
             },
         }
+
+        let creditsConfig = {
+            fontFamily: 'Courier',
+            fontSize: '10px',
+            backgroundColor: '#000000',
+            color: '#FFFFFF',
+            align: 'center',
+            padding: {
+                top: 5,
+                bottom: 5
+            }
+        }
         
         // add elapsed time
         this.total = this.add.text(game.config.width/2 - 35 , 0, this.score, scoreConfig);
@@ -73,11 +87,11 @@ class Play extends Phaser.Scene {
         this.sub.body.setAllowGravity(true);
 
         // add ocean floor
-        this.oceanFloor = this.physics.add.sprite(540, 725, 'oceanFloor');
-        this.oceanFloor.body.setAllowGravity(false);
-        this.oceanFloor.body.setImmovable(true);
+        this.collisionLine = this.physics.add.sprite(540, 800, 'collisionLine');
+        this.collisionLine.body.setAllowGravity(false);
+        this.collisionLine.body.setImmovable(true);
 
-        this.clock = this.time.delayedCall(100000000000, () => {
+        this.clock = this.time.delayedCall(10000000000000, () => {
             this.gameOver = true
         }, null, this);
 
@@ -87,11 +101,12 @@ class Play extends Phaser.Scene {
         }, null, this);
 
         // add collision with floor
-        this.physics.add.collider(this.sub, this.oceanFloor, (sub, oceanFloor) => {
+        this.physics.add.collider(this.sub, this.collisionLine, (sub, collisionLine) => {
             this.sound.play('subExplosion');
             sub.destroy();
             this.add.text(game.config.width/2, game.config.height/2, 'GAME OVER', gameOverConfig).setOrigin(0.5);
             this.add.text(game.config.width/2, game.config.height/2 + 32, 'Press R to restart', gameOverConfig).setOrigin(0.5);
+            this.add.text(game.config.width/2, game.config.height - 32, 'Art by: Carter Gruebel     SFX by: Carter Gruebel    Gameplay by: Carter Gruebel    Music by: JuliusH - downloaded from https://pixabay.com/music/search/ocean/?pagi=3', creditsConfig).setOrigin(0.5);
             this.gameOver = true;
         });
         
@@ -101,6 +116,7 @@ class Play extends Phaser.Scene {
             sub.destroy();
             this.add.text(game.config.width/2, game.config.height/2, 'GAME OVER', gameOverConfig).setOrigin(0.5);
             this.add.text(game.config.width/2, game.config.height/2 + 32, 'Press R to restart', gameOverConfig).setOrigin(0.5);
+            this.add.text(game.config.width/2, game.config.height - 32, 'Art by: Carter Gruebel     SFX by: Carter Gruebel    Gameplay by: Carter Gruebel    Music by: JuliusH - downloaded from https://pixabay.com/music/search/ocean/?pagi=3', creditsConfig).setOrigin(0.5);
             this.gameOver = true;
         });
         this.physics.add.collider(this.sub, this.eel, (sub, eel) => {
@@ -108,6 +124,7 @@ class Play extends Phaser.Scene {
             sub.destroy();
             this.add.text(game.config.width/2, game.config.height/2, 'GAME OVER', gameOverConfig).setOrigin(0.5);
             this.add.text(game.config.width/2, game.config.height/2 + 32, 'Press R to restart', gameOverConfig).setOrigin(0.5);
+            this.add.text(game.config.width/2, game.config.height - 32, 'Art by: Carter Gruebel     SFX by: Carter Gruebel    Gameplay by: Carter Gruebel    Music by: JuliusH - downloaded from https://pixabay.com/music/search/ocean/?pagi=3', creditsConfig).setOrigin(0.5);
             this.gameOver = true;
         });
     }
@@ -124,6 +141,7 @@ class Play extends Phaser.Scene {
             this.score = Math.ceil(this.clock.elapsed / 1000);
             this.total.setText(this.score);
             this.deepSea.tilePositionX += 3;
+            this.oceanFloor.tilePositionX += 6 ;
             if(Phaser.Input.Keyboard.JustDown(keySPACE)) {
                 this.sub.body.setVelocityY(-175);
             }
