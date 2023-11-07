@@ -1,7 +1,11 @@
 // Carter Gruebel
 // Hadal Hustle
-// hours spent
-// creative tilt justification
+// 22 hours
+// The technical aspect that I am proud of figuring out how to set gravity to just one sprite and 
+// not have it affect anything else in the physics world.
+//
+// I was really proud that I made all of the visual assets for this game.
+// I do not do art very much but I had fun making the art, especially the title screen.
 
 let config = {
     type: Phaser.AUTO,
