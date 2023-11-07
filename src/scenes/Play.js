@@ -72,15 +72,6 @@ class Play extends Phaser.Scene {
         keyR = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
         keySPACE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
 
-        // adding enemy groups
-        this.sharkGroup = this.add.group({
-            runChildUpdate: true
-        });
-
-        this.eelGroup = this.add.group({
-            runChildUpdate: true
-        });
-
         // add sub
         this.sub = this.physics.add.sprite(width / 10, height / 2, 'sub')
         this.sub.body.setCollideWorldBounds(true);
@@ -95,13 +86,22 @@ class Play extends Phaser.Scene {
             this.gameOver = true
         }, null, this);
 
+        // add groups
+        this.sharkGroup = this.add.group({
+            runChildUpdate: true
+        });
+
+        this.eelGroup = this.add.group({
+            runChildUpdate: true
+        });
+
         this.speedUp = this.time.delayedCall(15, () => {
             this.eelGroup.increase = true;
             this.sharkGroup.increase = true;
         }, null, this);
 
         // add collision with floor
-        this.physics.add.collider(this.sub, this.collisionLine, (sub, collisionLine) => {
+        this.physics.add.collider(this.sub, this.collisionLine, (sub) => {
             this.sound.play('subExplosion');
             sub.destroy();
             this.add.text(game.config.width/2, game.config.height/2, 'GAME OVER', gameOverConfig).setOrigin(0.5);
@@ -111,7 +111,7 @@ class Play extends Phaser.Scene {
         });
         
         // add collision with enemies
-        this.physics.add.collider(this.sub, this.shark, (sub, shark) => {
+        this.physics.add.collider(this.sub, this.sharkGroup, (sub) => {
             this.sound.play('subExplosion');
             sub.destroy();
             this.add.text(game.config.width/2, game.config.height/2, 'GAME OVER', gameOverConfig).setOrigin(0.5);
@@ -119,7 +119,7 @@ class Play extends Phaser.Scene {
             this.add.text(game.config.width/2, game.config.height - 32, 'Art by: Carter Gruebel     SFX by: Carter Gruebel    Gameplay by: Carter Gruebel    Music by: JuliusH - downloaded from https://pixabay.com/music/search/ocean/?pagi=3', creditsConfig).setOrigin(0.5);
             this.gameOver = true;
         });
-        this.physics.add.collider(this.sub, this.eel, (sub, eel) => {
+        this.physics.add.collider(this.sub, this.eelGroup, (sub) => {
             this.sound.play('subExplosion');
             sub.destroy();
             this.add.text(game.config.width/2, game.config.height/2, 'GAME OVER', gameOverConfig).setOrigin(0.5);
@@ -127,6 +127,17 @@ class Play extends Phaser.Scene {
             this.add.text(game.config.width/2, game.config.height - 32, 'Art by: Carter Gruebel     SFX by: Carter Gruebel    Gameplay by: Carter Gruebel    Music by: JuliusH - downloaded from https://pixabay.com/music/search/ocean/?pagi=3', creditsConfig).setOrigin(0.5);
             this.gameOver = true;
         });
+    }
+
+    // creating enemies and adding to group
+    addShark() {
+        let shark = new Shark(this, game.config.width, Phaser.Math.Between(40, 565), 'shark');
+        this.sharkGroup.add(shark);
+    }
+
+    addEel() {
+        let eel = new Shark(this, game.config.width, Phaser.Math.Between(40, 565), 'shark');
+        this.eelGroup.add(eel);
     }
 
     update() {
@@ -145,6 +156,7 @@ class Play extends Phaser.Scene {
             if(Phaser.Input.Keyboard.JustDown(keySPACE)) {
                 this.sub.body.setVelocityY(-175);
             }
+
         }
     }
 }
